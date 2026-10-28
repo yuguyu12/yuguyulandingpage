@@ -2585,7 +2585,7 @@ const ClosingSection = ({ isMobile, onCtaClick }) => {
 // 10. CONTACT / EARLY ACCESS MODAL
 // =====================================================================
 const ContactModal = ({ onClose, isMobile }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', interests: 'AI Coaching & Screenless Band', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', focus: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -2633,10 +2633,12 @@ const ContactModal = ({ onClose, isMobile }) => {
           position: 'relative',
           width: '100%',
           maxWidth: '560px',
+          maxHeight: '90vh',
+          overflowY: 'auto',
           background: 'var(--bg-secondary)',
           border: '1px solid var(--border-light)',
           borderRadius: '24px',
-          padding: isMobile ? '2rem 1.5rem' : '3rem 2.5rem',
+          padding: isMobile ? '2rem 1.5rem' : '2.5rem 2.25rem',
           boxShadow: '0 25px 60px rgba(0,0,0,0.8)'
         }}
       >
@@ -2734,26 +2736,41 @@ const ContactModal = ({ onClose, isMobile }) => {
             </div>
 
             <div>
-              <label htmlFor="modal-interest" className="mono-tag" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>
-                PRIMARY FOCUS
+              <label htmlFor="modal-phone" className="mono-tag" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>
+                PHONE NUMBER (OPTIONAL)
               </label>
-              <select
-                id="modal-interest"
-                name="interest"
-                value={formData.interests}
-                onChange={e => setFormData({ ...formData, interests: e.target.value })}
+              <input
+                id="modal-phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                placeholder="+1 555 019 2834"
                 style={{
                   width: '100%', padding: '0.85rem 1rem', borderRadius: '10px',
                   background: 'var(--bg-tertiary)', border: '1px solid var(--border-light)',
                   color: 'var(--text-primary)', fontSize: '0.95rem'
                 }}
-              >
-                <option value="AI Coaching & Screenless Band">AI Coaching + Screenless Wearable Band</option>
-                <option value="Cardiovascular & HRV Analytics">Cardiovascular & Baseline HRV Optimization</option>
-                <option value="Strength & Progressive Overload">Strength Programming & Progressive Overload</option>
-                <option value="Sleep Architecture & Recovery">Sleep Stages & Autonomic Restoration</option>
-                <option value="Metabolic Nutrition & Body Comp">Metabolic Nutrition & Energy Flux</option>
-              </select>
+              />
+            </div>
+
+            <div>
+              <label htmlFor="modal-focus" className="mono-tag" style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-secondary)' }}>
+                PRIMARY FOCUS
+              </label>
+              <input
+                id="modal-focus"
+                name="focus"
+                type="text"
+                value={formData.focus}
+                onChange={e => setFormData({ ...formData, focus: e.target.value })}
+                placeholder="e.g. Marathon training, recovery, sleep optimization"
+                style={{
+                  width: '100%', padding: '0.85rem 1rem', borderRadius: '10px',
+                  background: 'var(--bg-tertiary)', border: '1px solid var(--border-light)',
+                  color: 'var(--text-primary)', fontSize: '0.95rem'
+                }}
+              />
             </div>
 
             <div>
