@@ -38,7 +38,7 @@ const Hero = () => {
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <Link href="#contact" className="btn-primary flex items-center justify-center gap-2 group">
-                                <span>Request Access</span>
+                                <span>Get Early Access</span>
                                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>

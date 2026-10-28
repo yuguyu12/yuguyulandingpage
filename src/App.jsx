@@ -231,7 +231,7 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
               className="btn btn-accent"
               style={{ padding: '0.55rem 1.4rem', fontSize: '0.85rem' }}
             >
-              Request Access
+              Get Early Access
             </motion.button>
           )}
         </div>
@@ -276,7 +276,7 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
               className="btn btn-accent"
               style={{ padding: '1rem', fontSize: '1rem', marginTop: '1.5rem', width: '100%' }}
             >
-              Request Early Access
+              Get Early Access
             </motion.button>
           </motion.div>
         )}
@@ -737,7 +737,7 @@ const HeroSection = ({ isMobile, onCtaClick }) => {
                 className="btn btn-accent"
                 style={{ padding: '0.95rem 2.2rem', fontSize: '1rem' }}
               >
-                Request Early Access <ArrowRight size={17} style={{ marginLeft: '8px' }} />
+                Get Early Access <ArrowRight size={17} style={{ marginLeft: '8px' }} />
               </motion.button>
 
               <a
@@ -1277,7 +1277,7 @@ const ScreenlessWearableSection = ({ isMobile, onCtaClick }) => {
                         BETA ACCESS
                       </div>
                       <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.01em' }}>
-                        Cohort Waitlist <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#38BDF8' }}>OPEN</span>
+                        Join the Journey <span style={{ fontSize: '0.68rem', fontWeight: 600, color: '#38BDF8' }}>OPEN</span>
                       </div>
                     </div>
                   </div>
@@ -1524,7 +1524,7 @@ const ScreenlessWearableSection = ({ isMobile, onCtaClick }) => {
               className="btn btn-accent"
               style={{ padding: '0.75rem 1.6rem', fontSize: '0.9rem', whiteSpace: 'nowrap' }}
             >
-              Join Wrist Band Waitlist <ArrowRight size={16} style={{ marginLeft: '6px' }} />
+              Join the Journey <ArrowRight size={16} style={{ marginLeft: '6px' }} />
             </button>
           </div>
         </Reveal>
@@ -2572,7 +2572,7 @@ const ClosingSection = ({ isMobile, onCtaClick }) => {
             className="btn btn-accent"
             style={{ padding: '1.15rem 2.75rem', fontSize: '1.1rem' }}
           >
-            Request Early Access <ArrowRight size={19} style={{ marginLeft: '10px' }} />
+            Join the Journey <ArrowRight size={19} style={{ marginLeft: '10px' }} />
           </motion.button>
         </Reveal>
       </div>
@@ -2783,7 +2783,7 @@ const ContactModal = ({ onClose, isMobile }) => {
               className="btn btn-accent"
               style={{ padding: '0.95rem', fontSize: '1rem', width: '100%', opacity: isSubmitting ? 0.7 : 1, marginTop: '0.5rem' }}
             >
-              {isSubmitting ? 'Registering...' : 'Request Early Access'} <ArrowRight size={17} style={{ marginLeft: '8px' }} />
+              {isSubmitting ? 'Joining...' : 'Get Early Access'} <ArrowRight size={17} style={{ marginLeft: '8px' }} />
             </motion.button>
             <p style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', textAlign: 'center', margin: 0 }}>
               Zero spam. Your personal biometric telemetry sovereignty is protected.
