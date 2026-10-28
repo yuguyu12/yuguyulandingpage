@@ -1464,7 +1464,7 @@ const ScreenlessWearableSection = ({ isMobile, onCtaClick }) => {
             },
             {
               title: "Direct Feed to Your AI Coach",
-              desc: "Every pulse wave, autonomic variance, and sleep phase logged on your wrist syncs seamlessly to your personal AI Coach model. Your coach interprets your physiological readiness and adapts your workout before your feet hit the floor.",
+              desc: "Every pulse wave, autonomic variance, and sleep phase logged on your wrist syncs seamlessly to your personal coach model. Your coach interprets your physiological readiness and adapts your workout before your feet hit the floor.",
               icon: <Brain size={20} color="var(--accent-red)" />
             }
           ].map((item, idx) => (
@@ -1702,7 +1702,7 @@ const TelemetryMatrixSection = ({ isMobile }) => {
           </Reveal>
           <Reveal delay={0.15}>
             <p style={{ fontSize: isMobile ? '1rem' : '1.15rem' }}>
-              Yuguyu moves far beyond steps and calories. Explore the complete biometric and lifestyle matrix that feeds your personal AI coach.
+              Yuguyu moves far beyond steps and calories. Explore the complete biometric and lifestyle matrix that feeds your personal coach.
             </p>
           </Reveal>
         </div>
@@ -2114,7 +2114,7 @@ const DualEcosystemSection = ({ isMobile, onCtaClick }) => {
               <span className="mono-tag" style={{ color: 'var(--accent-red)', fontWeight: 800, display: 'block', marginBottom: '4px' }}>
                 THE CONVERGENCE
               </span>
-              <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Personal AI Coach</h4>
+              <h4 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Personal Coach</h4>
               <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.6 }}>
                 Constantly updates your personal baseline, explains the exact "why" behind every guidance, and adapts your plan in real time.
               </p>
