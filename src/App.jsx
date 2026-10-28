@@ -855,7 +855,7 @@ const HeroSection = ({ isMobile, onCtaClick }) => {
 const TelemetryRibbon = () => {
   const streamItems = [
     { label: 'HARDWARE', val: 'SCREENLESS WRIST BAND', status: '24/7 ACTIVE' },
-    { label: 'CHASSIS', val: 'MATTE TITANIUM & WEAVE', status: 'WATERPROOF' },
+    { label: 'INTEGRATION', val: 'UNIVERSAL WEARABLE SYNC', status: 'CONNECTED' },
     { label: 'CARDIOVASCULAR', val: 'HRV 84 MS', status: 'BASELINE +14%' },
     { label: 'SLEEP ARCHITECTURE', val: 'DEEP 1H 44M', status: 'RESTORED' },
     { label: 'METABOLIC EXPENDITURE', val: '2,640 KCAL', status: 'BALANCED' },
