@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@300..700&family=Outfit:wght@700&family=Satoshi:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap');
 
 :root {
   --device-rim: #1A1C23;
@@ -35,10 +35,11 @@
   --radius-xl: 32px;
   --radius-full: 9999px;
 
-  /* Typography */
-  --font-heading: 'Space Grotesk', 'Satoshi', sans-serif;
-  --font-logo: 'Outfit', sans-serif;
-  --font-body: 'Inter', -apple-system, sans-serif;
+  /* Typography Stack - Consistent, Modern, Premium */
+  --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, Menlo, Monaco, monospace;
+  --font-logo: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 }
 
 body.light-theme {
@@ -74,7 +75,10 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-body);
-  line-height: 1.6;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: optimizeLegibility;
+  line-height: 1.65;
+  letter-spacing: -0.011em;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -97,24 +101,47 @@ body {
   background: var(--border-focus);
 }
 
-/* Typography Hierarchy */
+/* Typography Hierarchy - Proportional, Balanced, Clean */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
   color: var(--text-primary);
+  text-wrap: balance;
 }
 
-h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 700; }
-h2 { font-size: clamp(2.2rem, 5vw, 3.8rem); letter-spacing: -0.03em; }
-h3 { font-size: clamp(1.4rem, 3vw, 2rem); }
-h4 { font-size: clamp(1.1rem, 2vw, 1.4rem); }
+h1 {
+  font-size: clamp(2.75rem, 6.2vw, 4.6rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+h2 {
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.026em;
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.018em;
+  line-height: 1.25;
+}
+
+h4 {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.35;
+}
 
 p {
-  font-size: 1.125rem;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
   color: var(--text-secondary);
   line-height: 1.7;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -364,13 +391,13 @@ body.light-theme .nav-blur {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 0.375rem 0.875rem;
+  padding: 0.35rem 0.85rem;
   border-radius: var(--radius-full);
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-family: var(--font-heading);
+  font-family: var(--font-mono);
 }
 
 /* Coach conversation bubble */
@@ -483,16 +510,18 @@ input::placeholder, textarea::placeholder {
 /* =================================================== */
 
 .mono-tag {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--text-tertiary);
+  font-feature-settings: "tnum", "zero";
 }
 
 .mono-val {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
   letter-spacing: -0.02em;
 }
 
@@ -797,9 +826,9 @@ body.light-theme .tech-grid-bg {
   background: rgba(225, 29, 72, 0.1);
   color: var(--accent-red);
   border: 1px solid rgba(225, 29, 72, 0.25);
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 4px;
-  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -812,9 +841,9 @@ body.light-theme .tech-grid-bg {
   background: rgba(147, 51, 234, 0.1);
   color: var(--accent-purple);
   border: 1px solid rgba(147, 51, 234, 0.25);
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 4px;
-  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -827,9 +856,9 @@ body.light-theme .tech-grid-bg {
   background: rgba(234, 88, 12, 0.1);
   color: var(--accent-orange);
   border: 1px solid rgba(234, 88, 12, 0.25);
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 4px;
-  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -845,9 +874,10 @@ body.light-theme .tech-grid-bg {
   border: 1px solid rgba(225, 29, 72, 0.3);
   padding: 3px 10px;
   border-radius: 6px;
-  font-family: ui-monospace, monospace;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -857,9 +887,10 @@ body.light-theme .tech-grid-bg {
   border: 1px solid rgba(147, 51, 234, 0.3);
   padding: 3px 10px;
   border-radius: 6px;
-  font-family: ui-monospace, monospace;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -869,9 +900,10 @@ body.light-theme .tech-grid-bg {
   border: 1px solid rgba(113, 113, 122, 0.3);
   padding: 3px 10px;
   border-radius: 6px;
-  font-family: ui-monospace, monospace;
-  font-size: 0.7rem;
-  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 

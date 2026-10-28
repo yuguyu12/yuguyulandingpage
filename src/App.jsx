@@ -428,7 +428,7 @@ const BiometricRadar = ({ isMobile }) => {
                 y={cy - maxR * rFrac + 11}
                 fill="rgba(255, 255, 255, 0.3)"
                 fontSize="8"
-                fontFamily="monospace"
+                fontFamily="var(--font-mono)"
               >
                 {Math.round(rFrac * 100)}%
               </text>
@@ -463,7 +463,7 @@ const BiometricRadar = ({ isMobile }) => {
                     fill="var(--text-secondary)"
                     fontSize={isMobile ? '8' : '9'}
                     fontWeight="600"
-                    fontFamily="ui-monospace, monospace"
+                    fontFamily="var(--font-mono)"
                     letterSpacing="0.05em"
                   >
                     {isMobile ? axis.short : axis.label}
@@ -516,7 +516,7 @@ const BiometricRadar = ({ isMobile }) => {
             <text x={cx} y={cy - 2} textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="800" fontFamily="var(--font-heading)">
               {current.recovery}
             </text>
-            <text x={cx} y={cy + 10} textAnchor="middle" fill="var(--accent-red)" fontSize="7" fontWeight="700" fontFamily="monospace">
+            <text x={cx} y={cy + 10} textAnchor="middle" fill="var(--accent-red)" fontSize="7" fontWeight="700" fontFamily="var(--font-mono)">
               {current.status}
             </text>
           </svg>
@@ -553,7 +553,7 @@ const BiometricRadar = ({ isMobile }) => {
                     border: `1px solid ${isSel ? 'var(--accent-crimson)' : 'var(--border-light)'}`,
                     fontSize: '0.72rem',
                     fontWeight: 600,
-                    fontFamily: 'ui-monospace, monospace',
+                    fontFamily: 'var(--font-mono)',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
@@ -2593,7 +2593,7 @@ const ContactModal = ({ onClose, isMobile }) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://formspree.io/f/xnjgqrzv", {
+      const response = await fetch("https://formspree.io/f/mrppkyky", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -2665,7 +2665,7 @@ const ContactModal = ({ onClose, isMobile }) => {
             Join the <span className="text-gradient-accent">Early Access</span> cohort.
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: '2rem', lineHeight: 1.6 }}>
-            Yuguyu is currently accepting early access applications for our AI coach beta and upcoming screenless hardware research trials.
+            Get early access to our adaptive AI coach, sync your existing wearable data, and join the journey as we build the upcoming screenless Yuguyu Band.
           </p>
         </div>
 
@@ -2686,9 +2686,9 @@ const ContactModal = ({ onClose, isMobile }) => {
             }}>
               <CheckCircle2 size={24} color="#22c55e" />
             </div>
-            <h3 style={{ marginBottom: '0.5rem', fontSize: '1.4rem' }}>Application Received.</h3>
+            <h3 style={{ marginBottom: '0.5rem', fontSize: '1.4rem' }}>Welcome to the Journey.</h3>
             <p style={{ color: 'var(--text-secondary)', marginBottom: '1.75rem', fontSize: '0.92rem', lineHeight: 1.6 }}>
-              We have added your profile to the early cohort queue. You will receive an invitation as slots open.
+              Thank you for joining. We will reach out with early access details for the AI coach and progress updates on the Yuguyu Band.
             </p>
             <button onClick={onClose} className="btn btn-primary" style={{ padding: '0.75rem 2rem' }}>
               Return to Website
