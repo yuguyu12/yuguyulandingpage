@@ -7,7 +7,6 @@ import {
   Activity,
   Target,
   ChevronRight,
-  ChevronUp,
   TrendingUp,
   Menu,
   X,
@@ -2521,7 +2520,7 @@ const CoachInAction = ({ isMobile }) => {
 // =====================================================================
 const ClosingSection = ({ isMobile, onCtaClick }) => {
   return (
-    <section id="early-access" className="section" style={{
+    <section className="section" style={{
       position: 'relative', overflow: 'hidden',
       padding: isMobile ? '6rem 0' : '10rem 0',
       background: 'var(--bg-primary)'
@@ -2886,161 +2885,6 @@ const Footer = ({ isMobile }) => (
 // =====================================================================
 // 12. ROOT APPLICATION
 // =====================================================================
-// =====================================================================
-// 11B. STICKY JUMP BAR / FLOATING NAVIGATION
-// =====================================================================
-const StickyJumpBar = ({ isMobile, onContactClick }) => {
-  const [visible, setVisible] = useState(false);
-  const [activeSection, setActiveSection] = useState('hero');
-
-  const navItems = [
-    { id: 'wearable-band', label: 'Band', icon: <Watch size={13} /> },
-    { id: 'telemetry-matrix', label: 'Metrics', icon: <Layers size={13} /> },
-    { id: 'calculated-indices', label: 'Indices', icon: <Activity size={13} /> },
-    { id: 'intelligence', label: 'Coach', icon: <Brain size={13} /> },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 350);
-
-      const sectionIds = ['hero', 'system', 'wearable-band', 'telemetry-matrix', 'calculated-indices', 'dual-ecosystem', 'intelligence', 'early-access'];
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 240) {
-            setActiveSection(sectionIds[i]);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ y: 50, opacity: 0, x: '-50%' }}
-          animate={{ y: 0, opacity: 1, x: '-50%' }}
-          exit={{ y: 50, opacity: 0, x: '-50%' }}
-          transition={{ duration: 0.25, ease: 'easeOut' }}
-          style={{
-            position: 'fixed',
-            bottom: isMobile ? '0.85rem' : '1.5rem',
-            left: '50%',
-            zIndex: 95,
-            display: 'flex',
-            alignItems: 'center',
-            gap: isMobile ? '3px' : '6px',
-            padding: isMobile ? '4px 6px' : '5px 10px',
-            borderRadius: '9999px',
-            background: 'var(--floating-nav-bg, rgba(12, 12, 16, 0.88))',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid var(--border-light)',
-            boxShadow: '0 16px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-            maxWidth: 'calc(100vw - 1.5rem)',
-            overflowX: 'auto'
-          }}
-        >
-          {/* Scroll To Top */}
-          <button
-            onClick={scrollToTop}
-            title="Scroll to top"
-            aria-label="Scroll to top"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: isMobile ? '28px' : '30px',
-              height: isMobile ? '28px' : '30px',
-              borderRadius: '50%',
-              background: 'var(--bg-tertiary)',
-              border: '1px solid var(--border-light)',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              flexShrink: 0,
-              transition: 'all 0.2s'
-            }}
-          >
-            <ChevronUp size={14} />
-          </button>
-
-          <div style={{ width: '1px', height: '16px', background: 'var(--border-light)', margin: '0 2px', flexShrink: 0 }} />
-
-          {/* Jump Section Links */}
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => scrollTo(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '5px',
-                  padding: isMobile ? '4px 8px' : '5px 11px',
-                  borderRadius: '9999px',
-                  border: isActive ? '1px solid var(--accent-red)' : '1px solid transparent',
-                  background: isActive ? 'rgba(225, 29, 72, 0.15)' : 'transparent',
-                  color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-                  fontSize: isMobile ? '0.72rem' : '0.78rem',
-                  fontWeight: isActive ? 600 : 500,
-                  fontFamily: 'var(--font-heading)',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0,
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <span style={{ color: isActive ? 'var(--accent-red)' : 'var(--text-tertiary)', display: 'flex' }}>
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-
-          <div style={{ width: '1px', height: '16px', background: 'var(--border-light)', margin: '0 2px', flexShrink: 0 }} />
-
-          {/* Early Access CTA */}
-          <button
-            onClick={onContactClick}
-            className="btn btn-accent"
-            style={{
-              padding: isMobile ? '4px 10px' : '5px 12px',
-              fontSize: isMobile ? '0.7rem' : '0.76rem',
-              borderRadius: '9999px',
-              whiteSpace: 'nowrap',
-              fontWeight: 600,
-              flexShrink: 0
-            }}
-          >
-            Early Access
-          </button>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
-
 function App() {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [isLightMode, setIsLightMode] = useState(false);
@@ -3061,12 +2905,6 @@ function App() {
         isMobile={isMobile}
         isLightMode={isLightMode}
         setIsLightMode={setIsLightMode}
-        onContactClick={() => setShowContactModal(true)}
-      />
-
-      {/* Floating Sticky Jump Bar */}
-      <StickyJumpBar
-        isMobile={isMobile}
         onContactClick={() => setShowContactModal(true)}
       />
 

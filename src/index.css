@@ -17,7 +17,6 @@
   --border-light: rgba(255, 255, 255, 0.08);
   --border-focus: rgba(255, 255, 255, 0.2);
   --glass-bg: rgba(10, 10, 15, 0.4);
-  --floating-nav-bg: rgba(12, 12, 16, 0.88);
 
   /* Shared Tokens - Deep bold accents */
   --accent-red: #E11D48; /* Crimson / Warm red */
@@ -59,16 +58,12 @@ body.light-theme {
   --border-light: rgba(0, 0, 0, 0.08);
   --border-focus: rgba(0, 0, 0, 0.2);
   --glass-bg: rgba(255, 255, 255, 0.6);
-  --floating-nav-bg: rgba(255, 255, 255, 0.92);
   
   --accent-glow-red: rgba(225, 29, 72, 0.08);
   --accent-glow-purple: rgba(147, 51, 234, 0.08);
 }
 
 /* Reset & Base */
-html {
-  scroll-behavior: smooth;
-}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -313,15 +308,13 @@ body.light-theme .btn-primary {
 }
 
 .section {
-  padding: 6rem 0;
-  scroll-margin-top: 80px;
+  padding: 8rem 0;
   position: relative;
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 4.25rem 0;
-    scroll-margin-top: 70px;
+    padding: 5rem 0;
   }
 }
 
