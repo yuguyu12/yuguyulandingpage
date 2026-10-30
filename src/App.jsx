@@ -107,30 +107,28 @@ const Reveal = ({ children, delay = 0, className = '', style = {} }) => (
 // =====================================================================
 // 1. NAVIGATION
 // =====================================================================
-const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
+const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick, currentPage, onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 30);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { label: 'System', href: '#system' },
-    { label: 'Screenless Band', href: '#wearable-band' },
-    { label: 'Telemetry Matrix', href: '#telemetry-matrix' },
-    { label: 'Calculated Indices', href: '#calculated-indices' },
-    { label: 'Hardware Roadmap', href: '#hardware-roadmap' },
+    { id: 'home', label: 'Overview', href: '#/' },
+    { id: 'band', label: 'Screenless Band', href: '#/band' },
+    { id: 'coach', label: 'Personal Coach', href: '#/coach' },
+    { id: 'telemetry', label: 'Telemetry Matrix', href: '#/telemetry' },
+    { id: 'indices', label: 'Calculated Indices', href: '#/indices' },
+    { id: 'ecosystem', label: 'Ecosystem & Roadmap', href: '#/ecosystem' },
   ];
 
-  const handleNavClick = (href) => {
+  const handleNavClick = (id) => {
     setMobileMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    onNavigate(id);
   };
 
   return (
@@ -138,7 +136,7 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
       <nav
         className="nav-blur"
         style={{
-          padding: isMobile ? '0.85rem 1.25rem' : '1rem 2.5rem',
+          padding: isMobile ? '0.85rem 1.25rem' : '0.85rem 2rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -153,10 +151,10 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
       >
         {/* Brand Logo */}
         <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          href="#/"
+          onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}
           style={{
-            fontSize: isMobile ? '1.45rem' : '1.65rem',
+            fontSize: isMobile ? '1.4rem' : '1.55rem',
             fontWeight: '800',
             fontFamily: 'var(--font-logo)',
             letterSpacing: '-0.04em',
@@ -177,27 +175,35 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
 
         {/* Desktop Nav Links */}
         {!isMobile && (
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                style={{
-                  color: 'var(--text-secondary)',
-                  fontSize: '0.86rem',
-                  fontWeight: 500,
-                  fontFamily: 'var(--font-heading)',
-                  letterSpacing: '-0.01em',
-                  transition: 'color 0.2s',
-                  cursor: 'pointer'
-                }}
-                onMouseEnter={e => e.target.style.color = 'var(--text-primary)'}
-                onMouseLeave={e => e.target.style.color = 'var(--text-secondary)'}
-              >
-                {link.label}
-              </a>
-            ))}
+          <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+            {navLinks.map((link) => {
+              const isActive = currentPage === link.id;
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
+                  style={{
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    fontSize: '0.82rem',
+                    fontWeight: isActive ? 700 : 500,
+                    fontFamily: 'var(--font-heading)',
+                    letterSpacing: '-0.01em',
+                    transition: 'all 0.2s ease',
+                    cursor: 'pointer',
+                    padding: '0.42rem 0.75rem',
+                    borderRadius: '8px',
+                    background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                    border: isActive ? '1px solid var(--border-light)' : '1px solid transparent',
+                    boxShadow: isActive ? '0 2px 8px rgba(0,0,0,0.25)' : 'none'
+                  }}
+                  onMouseEnter={e => { if (!isActive) e.target.style.color = 'var(--text-primary)'; }}
+                  onMouseLeave={e => { if (!isActive) e.target.style.color = 'var(--text-secondary)'; }}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
           </div>
         )}
 
@@ -247,34 +253,43 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
             style={{
               position: 'fixed', top: '60px', left: 0, right: 0, bottom: 0,
               background: 'var(--bg-primary)', zIndex: 99,
-              padding: '2.5rem 1.5rem',
-              display: 'flex', flexDirection: 'column', gap: '0.75rem'
+              padding: '2rem 1.5rem',
+              display: 'flex', flexDirection: 'column', gap: '0.65rem',
+              overflowY: 'auto'
             }}
           >
-            {navLinks.map((link, i) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                style={{
-                  fontSize: '1.35rem', fontWeight: 600, fontFamily: 'var(--font-heading)',
-                  color: 'var(--text-primary)', padding: '0.85rem 0',
-                  borderBottom: '1px solid var(--border-light)'
-                }}
-              >
-                {link.label}
-              </motion.a>
-            ))}
+            {navLinks.map((link, i) => {
+              const isActive = currentPage === link.id;
+              return (
+                <motion.a
+                  key={link.id}
+                  href={link.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  onClick={(e) => { e.preventDefault(); handleNavClick(link.id); }}
+                  style={{
+                    fontSize: '1.15rem', fontWeight: isActive ? 700 : 500, fontFamily: 'var(--font-heading)',
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    padding: '0.85rem 1rem',
+                    borderRadius: '12px',
+                    background: isActive ? 'rgba(225, 29, 72, 0.12)' : 'var(--bg-secondary)',
+                    border: isActive ? '1px solid var(--accent-red)' : '1px solid var(--border-light)',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                  }}
+                >
+                  <span>{link.label}</span>
+                  <ChevronRight size={16} color={isActive ? 'var(--accent-red)' : 'var(--text-tertiary)'} />
+                </motion.a>
+              );
+            })}
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.25 }}
               onClick={() => { setMobileMenuOpen(false); onContactClick(); }}
               className="btn btn-accent"
-              style={{ padding: '1rem', fontSize: '1rem', marginTop: '1.5rem', width: '100%' }}
+              style={{ width: '100%', padding: '0.9rem', fontSize: '1rem', marginTop: '0.75rem' }}
             >
               Get Early Access
             </motion.button>
@@ -284,7 +299,6 @@ const Navbar = ({ isMobile, isLightMode, setIsLightMode, onContactClick }) => {
     </>
   );
 };
-
 
 // =====================================================================
 // BIOMETRIC RADAR CONSOLE (Interactive Multi-Axis Telemetry)
@@ -647,7 +661,7 @@ const BiometricRadar = ({ isMobile }) => {
 // =====================================================================
 // 2. HERO SECTION : Product Led Positioning
 // =====================================================================
-const HeroSection = ({ isMobile, onCtaClick }) => {
+const HeroSection = ({ isMobile, onCtaClick, onExploreBand }) => {
   return (
     <section
       id="hero"
@@ -740,14 +754,14 @@ const HeroSection = ({ isMobile, onCtaClick }) => {
                 Get Early Access <ArrowRight size={17} style={{ marginLeft: '8px' }} />
               </motion.button>
 
-              <a
-                href="#wearable-band"
-                onClick={(e) => { e.preventDefault(); document.querySelector('#wearable-band')?.scrollIntoView({ behavior: 'smooth' }); }}
+              <button
+                type="button"
+                onClick={(e) => { e.preventDefault(); if (onExploreBand) onExploreBand(); }}
                 className="btn btn-secondary"
-                style={{ padding: '0.95rem 1.8rem', fontSize: '1rem', textAlign: 'center' }}
+                style={{ padding: '0.95rem 1.8rem', fontSize: '1rem', textAlign: 'center', cursor: 'pointer' }}
               >
                 Explore The Screenless Band
-              </a>
+              </button>
             </motion.div>
 
             {/* Athlete Cohort Presence */}
@@ -2816,7 +2830,7 @@ const ContactModal = ({ onClose, isMobile }) => {
 // =====================================================================
 // 11. FOOTER
 // =====================================================================
-const Footer = ({ isMobile }) => (
+const Footer = ({ isMobile, onNavigate }) => (
   <footer style={{
     padding: '4rem 0 2.5rem', background: 'var(--bg-secondary)',
     position: 'relative', borderTop: '1px solid var(--border-light)'
@@ -2843,17 +2857,18 @@ const Footer = ({ isMobile }) => (
         {/* Links Navigation */}
         <div style={{ display: 'flex', gap: '3.5rem', flexWrap: 'wrap', justifyContent: isMobile ? 'center' : 'flex-end' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-            <span className="mono-tag" style={{ color: 'var(--text-primary)', marginBottom: '0.25rem' }}>TELEMETRY</span>
-            <a href="#wearable-band" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Screenless Wrist Band</a>
-            <a href="#telemetry-matrix" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>7 Metric Domains</a>
-            <a href="#calculated-indices" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>5 Calculated Indices</a>
-            <a href="#dual-ecosystem" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Dual Source Model</a>
-            <a href="#hardware-roadmap" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Hardware Prioritization</a>
+            <span className="mono-tag" style={{ color: 'var(--text-primary)', marginBottom: '0.25rem' }}>PLATFORM</span>
+            <a href="#/" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Overview</a>
+            <a href="#/band" onClick={(e) => { e.preventDefault(); onNavigate('band'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Screenless Wrist Band</a>
+            <a href="#/coach" onClick={(e) => { e.preventDefault(); onNavigate('coach'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Adaptive Personal Coach</a>
+            <a href="#/telemetry" onClick={(e) => { e.preventDefault(); onNavigate('telemetry'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>7 Metric Domains</a>
+            <a href="#/indices" onClick={(e) => { e.preventDefault(); onNavigate('indices'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>5 Calculated Indices</a>
+            <a href="#/ecosystem" onClick={(e) => { e.preventDefault(); onNavigate('ecosystem'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Universal Sync & Roadmap</a>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
             <span className="mono-tag" style={{ color: 'var(--text-primary)', marginBottom: '0.25rem' }}>COMPANY</span>
-            <a href="#intelligence" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Reasoning Engine</a>
+            <a href="#/coach" onClick={(e) => { e.preventDefault(); onNavigate('coach'); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Reasoning Engine</a>
             <a href="#" onClick={(e) => { e.preventDefault(); alert("Privacy Policy: Yuguyu adheres strictly to consumer biometric data sovereignty. Telemetry is encrypted at rest and in transit."); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Data Privacy</a>
             <a href="#" onClick={(e) => { e.preventDefault(); alert("Terms: Yuguyu provides athletic wellness guidance and is not a clinical medical diagnostic device."); }} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Terms of Service</a>
           </div>
@@ -2881,14 +2896,459 @@ const Footer = ({ isMobile }) => (
   </footer>
 );
 
+// 12. ROOT APPLICATION
+// =====================================================================
 
 // =====================================================================
-// 12. ROOT APPLICATION
+// DEDICATED PAGE COMPONENTS & ROUTER
+// =====================================================================
+
+const PageHeader = ({ tag, title, highlight, description, isMobile }) => (
+  <div style={{
+    paddingTop: isMobile ? '6.5rem' : '8.5rem',
+    paddingBottom: isMobile ? '2.5rem' : '3.5rem',
+    textAlign: 'center',
+    position: 'relative',
+    overflow: 'hidden'
+  }}>
+    <div style={{
+      position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)',
+      width: isMobile ? '320px' : '650px', height: isMobile ? '220px' : '350px',
+      background: 'radial-gradient(circle, rgba(225, 29, 72, 0.12) 0%, transparent 70%)',
+      filter: 'blur(70px)', pointerEvents: 'none'
+    }} />
+
+    <div className="container" style={{ position: 'relative', zIndex: 10 }}>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <span className="label-tag" style={{
+          background: 'rgba(225, 29, 72, 0.08)', color: 'var(--accent-red)',
+          border: '1px solid rgba(225, 29, 72, 0.25)', marginBottom: '1.25rem', display: 'inline-flex'
+        }}>
+          {tag}
+        </span>
+      </motion.div>
+
+      <motion.h1
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.08 }}
+        style={{
+          fontSize: isMobile ? 'clamp(2rem, 7vw, 2.6rem)' : 'clamp(2.8rem, 4.5vw, 3.8rem)',
+          fontWeight: 800,
+          marginBottom: '1.25rem',
+          lineHeight: 1.1
+        }}
+      >
+        {title} {highlight && <span className="text-gradient-accent">{highlight}</span>}
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.16 }}
+        style={{
+          fontSize: isMobile ? '1rem' : '1.18rem',
+          color: 'var(--text-secondary)',
+          maxWidth: '680px',
+          margin: '0 auto',
+          lineHeight: 1.7
+        }}
+      >
+        {description}
+      </motion.p>
+    </div>
+  </div>
+);
+
+// Platform Modules Explorer Grid (Home page)
+const PlatformOverviewSection = ({ isMobile, onNavigate }) => {
+  const modules = [
+    {
+      id: 'band',
+      tag: 'HARDWARE',
+      title: 'The Screenless Wearable Wrist Band',
+      desc: 'Engineered for unbroken 24/7 skin adherence with continuous 250 Hz optical telemetry, grade 5 titanium, and zero screens.',
+      icon: <Watch size={24} color="var(--accent-red)" />,
+      badge: '250 Hz Continuous',
+      cta: 'Explore Screenless Band'
+    },
+    {
+      id: 'coach',
+      tag: 'INTELLIGENCE',
+      title: 'Adaptive Personal Coach',
+      desc: 'The reasoning engine that analyzes cardiovascular readiness, training strain, and sleep debt to dynamically adapt reps and load.',
+      icon: <Brain size={24} color="var(--accent-red)" />,
+      badge: 'Dynamic Adaptation',
+      cta: 'See Coach In Action'
+    },
+    {
+      id: 'telemetry',
+      tag: 'BIOMETRICS',
+      title: '7-Category Telemetry Matrix',
+      desc: 'From HRV and overnight skin temperature to barbell velocity and sleep architecture, mapped against your personal baseline.',
+      icon: <Layers size={24} color="var(--accent-red)" />,
+      badge: '40+ Verified Signals',
+      cta: 'Explore 7 Domains'
+    },
+    {
+      id: 'indices',
+      tag: 'ALGORITHMS',
+      title: '5 Calculated Composite Indices',
+      desc: 'Transform raw data into 5 actionable scores: CNS recovery, musculoskeletal strain, metabolic velocity, and restorative depth.',
+      icon: <Activity size={24} color="var(--accent-red)" />,
+      badge: 'Mathematical Models',
+      cta: 'View Calculated Indices'
+    },
+    {
+      id: 'ecosystem',
+      tag: 'COMPATIBILITY',
+      title: 'Dual-Source Ecosystem & Roadmap',
+      desc: 'Sync Apple Health, Garmin, Whoop, and Oura immediately. Seamlessly transition to the Yuguyu Band in future cohort phases.',
+      icon: <Radio size={24} color="var(--accent-red)" />,
+      badge: 'Universal Sync',
+      cta: 'View Ecosystem & Roadmap'
+    }
+  ];
+
+  return (
+    <section className="section" style={{ position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}>
+      <div className="section-divider" />
+      <div className="container">
+        <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto 3.5rem auto' }}>
+          <Reveal>
+            <span className="label-tag" style={{
+              background: 'rgba(225, 29, 72, 0.08)', color: 'var(--accent-red)',
+              border: '1px solid rgba(225, 29, 72, 0.2)', marginBottom: '1.25rem', display: 'inline-flex'
+            }}>
+              PLATFORM MODULES // EXPLORE YUGUYU
+            </span>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h2 style={{ marginTop: '0.75rem', marginBottom: '1.25rem' }}>
+              Explore the <span className="text-gradient">Yuguyu Platform.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <p style={{ fontSize: isMobile ? '1rem' : '1.15rem' }}>
+              Select a dedicated module to explore the hardware engineering, AI reasoning engine, telemetry matrix, and universal sync.
+            </p>
+          </Reveal>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '1.5rem'
+        }}>
+          {modules.map((m, idx) => (
+            <Reveal key={m.id} delay={0.05 * idx}>
+              <div
+                className="glass-card"
+                onClick={() => onNavigate(m.id)}
+                style={{
+                  padding: '2rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '100%',
+                  cursor: 'pointer',
+                  border: '1px solid var(--border-light)',
+                  transition: 'all 0.25s ease'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+                    <div style={{
+                      width: '46px', height: '46px', borderRadius: '12px',
+                      background: 'var(--bg-tertiary)', border: '1px solid var(--border-light)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}>
+                      {m.icon}
+                    </div>
+                    <span className="mono-tag" style={{ color: 'var(--accent-red)' }}>{m.badge}</span>
+                  </div>
+
+                  <span className="mono-tag" style={{ color: 'var(--text-tertiary)', display: 'block', marginBottom: '6px' }}>
+                    {m.tag}
+                  </span>
+                  <h3 style={{ fontSize: '1.35rem', marginBottom: '0.75rem', lineHeight: 1.25 }}>
+                    {m.title}
+                  </h3>
+                  <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1.75rem' }}>
+                    {m.desc}
+                  </p>
+                </div>
+
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  color: 'var(--text-primary)', fontWeight: 600, fontSize: '0.9rem'
+                }}>
+                  <span>{m.cta}</span>
+                  <ArrowRight size={16} color="var(--accent-red)" />
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Technical Specs Grid (Band Page)
+const BandSpecsSection = ({ isMobile, onCtaClick }) => {
+  const specs = [
+    { category: 'Optical Sensing', spec: 'Multi-wavelength green, red & infrared photoplethysmography (PPG) at 250 Hz continuous' },
+    { category: 'Motion & Mechanics', spec: '3-Axis precision 16-bit accelerometer capturing movement velocity and sleep dynamics' },
+    { category: 'Thermal Monitoring', spec: 'Sub-millimeter continuous epidermal skin temperature sensor monitoring circadian shifts' },
+    { category: 'Chassis & Materials', spec: 'Grade 5 micro-blasted titanium case with bio-inert medical-grade hypoallergenic backing' },
+    { category: 'Battery & Pacing', spec: '7+ days of unbroken continuous sampling on a single magnetic inductive charge' },
+    { category: 'Water Resistance', spec: '5 ATM rated (50 meters submersible) for open water, pool, sauna, and high humidity workouts' }
+  ];
+
+  return (
+    <section className="section" style={{ background: 'var(--bg-primary)', position: 'relative' }}>
+      <div className="section-divider" />
+      <div className="container">
+        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3rem auto' }}>
+          <Reveal>
+            <span className="mono-tag" style={{ color: 'var(--accent-red)', marginBottom: '8px', display: 'inline-block' }}>
+              HARDWARE SPECIFICATIONS
+            </span>
+            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.4rem', marginTop: '0.5rem' }}>
+              Built for <span className="text-gradient">Continuous Adherence.</span>
+            </h2>
+          </Reveal>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+          gap: '1.25rem',
+          maxWidth: '960px',
+          margin: '0 auto'
+        }}>
+          {specs.map((item, idx) => (
+            <Reveal key={item.category} delay={idx * 0.05}>
+              <div className="glass-card" style={{ padding: '1.5rem', border: '1px solid var(--border-light)' }}>
+                <span className="mono-tag" style={{ color: 'var(--accent-red)', display: 'block', marginBottom: '6px' }}>
+                  {item.category}
+                </span>
+                <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: 1.5 }}>
+                  {item.spec}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Coach Architecture & Digital Twin (Coach Page)
+const CoachArchitectureSection = ({ isMobile, onCtaClick }) => {
+  return (
+    <section className="section" style={{ background: 'var(--bg-secondary)', position: 'relative' }}>
+      <div className="section-divider" />
+      <div className="container">
+        <div style={{ textAlign: 'center', maxWidth: '720px', margin: '0 auto 3.5rem auto' }}>
+          <Reveal>
+            <span className="mono-tag" style={{ color: 'var(--accent-red)', marginBottom: '8px', display: 'inline-block' }}>
+              SYSTEM ARCHITECTURE
+            </span>
+            <h2 style={{ fontSize: isMobile ? '1.8rem' : '2.4rem', marginTop: '0.5rem' }}>
+              Your Continuous <span className="text-gradient">Physiological Twin.</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', marginTop: '1rem', lineHeight: 1.7 }}>
+              Unlike generic fitness trackers that evaluate you against arbitrary population medians, Yuguyu builds an individual digital twin updated every millisecond.
+            </p>
+          </Reveal>
+        </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          gap: '1.5rem',
+          maxWidth: '1100px',
+          margin: '0 auto'
+        }}>
+          <Reveal delay={0.05}>
+            <div className="glass-card" style={{ padding: '2rem', height: '100%' }}>
+              <Zap size={24} color="var(--accent-red)" style={{ marginBottom: '1rem' }} />
+              <h4 style={{ fontSize: '1.2rem', marginBottom: '0.75rem' }}>Continuous Baseline</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                Every metric is scored relative to your trailing 30-day personal baseline, recognizing biological individuality across age, gender, and training phase.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="glass-card" style={{ padding: '2rem', height: '100%' }}>
+              <Sliders size={24} color="var(--accent-red)" style={{ marginBottom: '1rem' }} />
+              <h4 style={{ fontSize: '1.2rem', marginBottom: '0.75rem' }}>Dynamic Load Adjustment</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                If overnight HRV drops 25% due to accumulated strain, tomorrow's programmed heavy sets are dynamically shifted to regenerative tempo work.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.15}>
+            <div className="glass-card" style={{ padding: '2rem', height: '100%' }}>
+              <Shield size={24} color="var(--accent-red)" style={{ marginBottom: '1rem' }} />
+              <h4 style={{ fontSize: '1.2rem', marginBottom: '0.75rem' }}>Explainable Directives</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                Never accept arbitrary numbers. Your coach provides the exact physiological reasoning behind every prescription, giving athletes complete clarity.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// 1. HOME PAGE (Overview)
+const HomePage = ({ isMobile, onCtaClick, onNavigate }) => (
+  <>
+    <HeroSection
+      isMobile={isMobile}
+      onCtaClick={onCtaClick}
+      onExploreBand={() => onNavigate('band')}
+    />
+    <TelemetryRibbon />
+    <ProblemSection isMobile={isMobile} />
+    <PlatformOverviewSection isMobile={isMobile} onNavigate={onNavigate} />
+    <ClosingSection isMobile={isMobile} onCtaClick={onCtaClick} />
+  </>
+);
+
+// 2. BAND PAGE
+const BandPage = ({ isMobile, onCtaClick }) => (
+  <div>
+    <PageHeader
+      tag="PROPRIETARY HARDWARE // 250 HZ CONTINUOUS"
+      title="The Screenless"
+      highlight="Wearable Wrist Band"
+      description="Zero screens. Zero notifications. Just unbroken, medical-grade biometric telemetry feeding directly into your personal coach."
+      isMobile={isMobile}
+    />
+    <ScreenlessWearableSection isMobile={isMobile} onCtaClick={onCtaClick} />
+    <BandSpecsSection isMobile={isMobile} onCtaClick={onCtaClick} />
+    <ClosingSection isMobile={isMobile} onCtaClick={onCtaClick} />
+  </div>
+);
+
+// 3. COACH PAGE
+const CoachPage = ({ isMobile, onCtaClick }) => (
+  <div>
+    <PageHeader
+      tag="PHYSIOLOGICAL INTELLIGENCE // ADAPTIVE MODEL"
+      title="Your Adaptive"
+      highlight="Personal Coach"
+      description="The intelligence layer that translates your sleep, strain, and recovery signals into tomorrow morning's training prescription."
+      isMobile={isMobile}
+    />
+    <CoachInAction isMobile={isMobile} />
+    <CoachArchitectureSection isMobile={isMobile} onCtaClick={onCtaClick} />
+    <ClosingSection isMobile={isMobile} onCtaClick={onCtaClick} />
+  </div>
+);
+
+// 4. TELEMETRY PAGE
+const TelemetryPage = ({ isMobile, onCtaClick, onNavigate }) => (
+  <div>
+    <PageHeader
+      tag="BIOMETRIC TAXONOMY // 7 DOMAINS"
+      title="7-Category Health & Fitness"
+      highlight="Telemetry Matrix"
+      description="Yuguyu moves far beyond steps and calories. Explore the complete biometric and lifestyle matrix that feeds your personal coach."
+      isMobile={isMobile}
+    />
+    <TelemetryMatrixSection isMobile={isMobile} />
+    <section className="section" style={{ background: 'var(--bg-primary)', textAlign: 'center', padding: '4.5rem 0' }}>
+      <div className="container">
+        <Reveal>
+          <div className="glass-card" style={{ maxWidth: '720px', margin: '0 auto', padding: '2.5rem 2rem', border: '1px solid var(--border-light)' }}>
+            <span className="mono-tag" style={{ color: 'var(--accent-red)', marginBottom: '8px', display: 'inline-block' }}>
+              ALGORITHMIC SYNTHESIS
+            </span>
+            <h3 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>
+              How Yuguyu Calculates Composite Scores
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.75rem', lineHeight: 1.6 }}>
+              These 40+ raw signals feed into our 5 composite indices to calculate CNS strain, mechanical recovery, and metabolic velocity in real time.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button onClick={() => onNavigate('indices')} className="btn btn-secondary">
+                Explore The 5 Calculated Indices <ArrowRight size={16} style={{ marginLeft: '6px' }} />
+              </button>
+              <button onClick={onCtaClick} className="btn btn-accent">
+                Get Early Access
+              </button>
+            </div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  </div>
+);
+
+// 5. INDICES PAGE
+const IndicesPage = ({ isMobile, onCtaClick }) => (
+  <div>
+    <PageHeader
+      tag="COMPOSITE METRICS // MATHEMATICAL MODELS"
+      title="The 5 Calculated"
+      highlight="Composite Indices"
+      description="Raw data is noisy and contradictory. These 5 real-time indices calculate exactly how ready, strained, and recovered you are."
+      isMobile={isMobile}
+    />
+    <CalculatedIndicesSection isMobile={isMobile} />
+    <ClosingSection isMobile={isMobile} onCtaClick={onCtaClick} />
+  </div>
+);
+
+// 6. ECOSYSTEM PAGE
+const EcosystemPage = ({ isMobile, onCtaClick }) => (
+  <div>
+    <PageHeader
+      tag="UNIVERSAL SYNC // PRODUCT HORIZONS"
+      title="Dual-Source Architecture &"
+      highlight="Hardware Roadmap"
+      description="Don’t wait for dedicated hardware. Sync your existing wearable today, and upgrade to the Screenless Band tomorrow."
+      isMobile={isMobile}
+    />
+    <DualEcosystemSection isMobile={isMobile} onCtaClick={onCtaClick} />
+    <ClosingSection isMobile={isMobile} onCtaClick={onCtaClick} />
+  </div>
+);
+
+// Hash Router Helper
+const getPageFromHash = () => {
+  const hash = window.location.hash.replace(/^#\/?/, '').toLowerCase().trim();
+  if (['band', 'wearable-band', 'hardware'].includes(hash)) return 'band';
+  if (['coach', 'intelligence', 'ai-coach'].includes(hash)) return 'coach';
+  if (['telemetry', 'telemetry-matrix', 'metrics'].includes(hash)) return 'telemetry';
+  if (['indices', 'calculated-indices'].includes(hash)) return 'indices';
+  if (['ecosystem', 'roadmap', 'hardware-roadmap', 'dual-ecosystem'].includes(hash)) return 'ecosystem';
+  return 'home';
+};
+
+// =====================================================================
+// ROOT APPLICATION
 // =====================================================================
 function App() {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [isLightMode, setIsLightMode] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(getPageFromHash);
 
   useEffect(() => {
     if (isLightMode) {
@@ -2898,6 +3358,40 @@ function App() {
     }
   }, [isLightMode]);
 
+  useEffect(() => {
+    const handleHashChange = () => {
+      const newPage = getPageFromHash();
+      setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigate = (pageId) => {
+    window.location.hash = pageId === 'home' ? '/' : `/${pageId}`;
+    setCurrentPage(pageId);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  const renderCurrentPage = () => {
+    switch (currentPage) {
+      case 'band':
+        return <BandPage isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />;
+      case 'coach':
+        return <CoachPage isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />;
+      case 'telemetry':
+        return <TelemetryPage isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} onNavigate={navigate} />;
+      case 'indices':
+        return <IndicesPage isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />;
+      case 'ecosystem':
+        return <EcosystemPage isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />;
+      case 'home':
+      default:
+        return <HomePage isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} onNavigate={navigate} />;
+    }
+  };
+
   return (
     <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--bg-primary)' }}>
       {/* Navigation */}
@@ -2906,23 +3400,27 @@ function App() {
         isLightMode={isLightMode}
         setIsLightMode={setIsLightMode}
         onContactClick={() => setShowContactModal(true)}
+        currentPage={currentPage}
+        onNavigate={navigate}
       />
 
-      {/* Core Website Flow */}
+      {/* Dynamic Page Content */}
       <main>
-        <HeroSection isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />
-        <TelemetryRibbon />
-        <ProblemSection isMobile={isMobile} />
-        <ScreenlessWearableSection isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />
-        <TelemetryMatrixSection isMobile={isMobile} />
-        <CalculatedIndicesSection isMobile={isMobile} />
-        <DualEcosystemSection isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />
-        <CoachInAction isMobile={isMobile} />
-        <ClosingSection isMobile={isMobile} onCtaClick={() => setShowContactModal(true)} />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -14 }}
+            transition={{ duration: 0.26, ease: 'easeOut' }}
+          >
+            {renderCurrentPage()}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Footer */}
-      <Footer isMobile={isMobile} />
+      <Footer isMobile={isMobile} onNavigate={navigate} />
 
       {/* Early Access Form Modal */}
       <AnimatePresence>
